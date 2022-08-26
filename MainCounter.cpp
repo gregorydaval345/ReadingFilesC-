@@ -5,9 +5,12 @@
 #include <algorithm>
 #include <map>
 #include <string>
+#include <cstring>
 #include <vector>
 
 using namespace std;
+
+#define TOP_LEN 11
 
 template <class T>
 struct less_second : std::binary_function<T, T, bool>
@@ -47,12 +50,24 @@ int main()
 
     map<string, MainCounter> counter;
 
+    size_t len;
+
     ifstream input;
+    ifstream input2;
     input.open(path.c_str());
+    input2.open(commonWordPath.c_str());
+
+    std::string fp = commonWordPath;
 
     if (!input)
     {
         cout << "Error opening file alice_in_wonderland.txt\n";
+        return 0;
+    }
+
+    if (!input2)
+    {
+        cout << "Error opening file common.txt\n";
         return 0;
     }
 
@@ -100,6 +115,33 @@ int main()
             << (*iter).second.value
             << endl;
     }
+
+    // Filter out common words
+    // int isCommonWord(char *word)
+    // {
+    //     int i = 0;
+    //     for (i = 0; i < TOP_LEN; i++)
+    //     {
+    //         if (strcmp(input2[i], word) == 0)
+    //             return 1;
+    //     }
+    //     return 0;
+    // }
+
+    char ch[100], ch1[100];
+    int max = 0;
+
+    while (!input.eof())
+    {
+        input >> ch;
+        if (max < strlen(ch))
+        {
+            max = strlen(ch);
+            strcpy(ch1, ch);
+        }
+    }
+    input.close();
+    cout << "Largest word in alice file:", ch1;
 
     return 0;
 }
