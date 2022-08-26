@@ -1,6 +1,8 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 #include <map>
 #include <string>
 
@@ -18,6 +20,12 @@ public:
 ostream &operator<<(ostream &st, MainCounter &mc)
 {
     return st << mc.value;
+}
+
+// Removing the unwanted characters and from a string
+bool filter(char c)
+{
+    return isalpha(c) == 0;
 }
 
 const string path = "alice_in_wonderland.txt";
@@ -40,12 +48,14 @@ int main()
     {
         input >> token;
 
-        if (input)
+        // Remove the unwanted characters from string
+        token.resize(remove_if(token.begin(), token.end(), filter) - token.begin());
+
+            if (input)
         {
             counter[token]++;
         }
-        else
-            break;
+        else break;
     }
 
     map<string, MainCounter, less<string>>::iterator it;
@@ -55,7 +65,7 @@ int main()
          it++)
     {
         cout << (*it).first
-             << ", "
+             << "\t"
              << (*it).second
              << endl;
     }
